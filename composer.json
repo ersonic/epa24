@@ -3,7 +3,8 @@
     "description": "Library Platform Application", 
     "keywords": ["mvc","webapplication","app", "website", "library"],
     "homepage": "http://epa24.pl",
-    "minimum-stability" : "dev", 
+    "minimum-stability" : "dev",
+    "prefer-stable" : true,
     "license": "MIT", 
     "require": {
         "php" : "^5.6 || ^7.0",
