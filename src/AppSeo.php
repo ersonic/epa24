@@ -13,5 +13,4 @@ namespace Epa;
 
 class AppSeo
 {
-
 }

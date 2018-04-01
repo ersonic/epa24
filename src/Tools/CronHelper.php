@@ -16,27 +16,29 @@ class CronHelper
 {
 
     /**
+     *
      * @var string
      */
     private static $pid;
 
     /**
+     *
      * @name construcor
      * @access public
      */
     public function __construct()
-    {
-    }
+    {}
 
     /**
+     *
      * @name __clone
      * @access public
      */
     public function __clone()
-    {
-    }
+    {}
 
     /**
+     *
      * @name isrunning
      * @access private
      * @return bool
@@ -51,6 +53,7 @@ class CronHelper
     }
 
     /**
+     *
      * @name lock
      * @access public
      * @return bool|string
@@ -58,7 +61,7 @@ class CronHelper
     public static function lock()
     {
         $lockFile = LOCK_DIR . PROGRAM_NAME . FILE_NAME . LOCK_SUFFIX;
-
+        
         if (file_exists($lockFile)) {
             // Is running
             self::$pid = file_get_contents($lockFile);
@@ -69,7 +72,7 @@ class CronHelper
                 error_log("==" . self::$pid . "== Previous job died abruptly...");
             }
         }
-
+        
         self::$pid = getmypid();
         file_put_contents($lockFile, self::$pid);
         error_log("==" . self::$pid . "== Lock acquired, processing the job...");
@@ -77,6 +80,7 @@ class CronHelper
     }
 
     /**
+     *
      * @name unlock
      * @access public
      * @return bool
@@ -84,7 +88,7 @@ class CronHelper
     public static function unlock()
     {
         $lockFile = LOCK_DIR . PROGRAM_NAME . FILE_NAME . LOCK_SUFFIX;
-
+        
         if (file_exists($lockFile)) {
             unlink($lockFile);
         }

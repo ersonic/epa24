@@ -10,28 +10,33 @@
  * @license http://www.epa24.pl/license
  * @link http://www.epa24.pl/wiki
  */
- namespace Epa\Tools;
+namespace Epa\Tools;
 
 class IpLocalization
 {
+
     /**
+     *
      * @var string
      */
     private static $hostApi = 'https://ipapi.co/';
 
     /**
+     *
      * @var string
      */
     private $format = 'json';
 
     /**
+     *
      * @var array
      */
     private $errors = [];
 
     /**
+     *
      * @name getHostApi
-     * @acces public
+     *       @acces public
      * @return string
      */
     public static function getHostApi()
@@ -40,6 +45,7 @@ class IpLocalization
     }
 
     /**
+     *
      * @name setFormat
      * @access public
      */
@@ -49,6 +55,7 @@ class IpLocalization
     }
 
     /**
+     *
      * @name hasError
      * @access private
      * @return boolean
@@ -63,6 +70,7 @@ class IpLocalization
     }
 
     /**
+     *
      * @name getErrors
      * @access private
      * @return array
@@ -73,13 +81,20 @@ class IpLocalization
     }
 
     /**
+     *
      * @name getFormat
      * @access public
      * @return string|boolean
      */
     public function getFormat()
     {
-        if (in_array($this->format, ['csv', 'yaml', 'xml', 'json', 'jsonp'])) {
+        if (in_array($this->format, [
+            'csv',
+            'yaml',
+            'xml',
+            'json',
+            'jsonp'
+        ])) {
             return $this->format;
         } else {
             $this->errors[] = 'Invalid format ' . $this->format;
@@ -88,6 +103,7 @@ class IpLocalization
     }
 
     /**
+     *
      * @name _csv
      * @access private
      * @return object
@@ -95,28 +111,29 @@ class IpLocalization
     private function _csv($data)
     {
         $tmp = explode("\n", $data);
-
+        
         $obj = new \stdClass();
         $keys = [];
-
+        
         if (isset($tmp[0])) {
             $_keys = explode(',', $tmp[0]);
             foreach ($_keys as $p => $value) {
                 $keys[$p] = $value;
             }
         }
-
+        
         if (isset($tmp[1])) {
             $_data = explode(',', $tmp[1]);
             foreach ($_data as $p => $value) {
                 $obj->{$keys[$p]} = $value;
             }
         }
-
+        
         return $obj;
     }
 
     /**
+     *
      * @name _yaml
      * @access private
      * @return object
@@ -140,10 +157,12 @@ class IpLocalization
         }
         return $obj;
     }
+
     /**
+     *
      * @name _xml
      * @access private
-     * @param string $data
+     * @param string $data            
      * @return object|boolean
      */
     private function _xml($data)
@@ -158,52 +177,53 @@ class IpLocalization
     }
 
     /**
+     *
      * @name info
      * @access public
-     * @param mixed $ip
+     * @param mixed $ip            
      * @return object
      */
     public function info($ip = NULL)
     {
         if (is_null($ip)) {
-            $ip = file_get_contents(self::getHostApi().'ip/');
+            $ip = file_get_contents(self::getHostApi() . 'ip/');
         }
-
+        
         if (! is_bool($this->getFormat())) {
-
+            
             $data = false;
-
+            
             switch ($this->getFormat()) {
-
+                
                 case 'csv':
-                    $data = $this->_csv(file_get_contents(self::getHostApi().$ip.'/csv/'));
-                break;
-
+                    $data = $this->_csv(file_get_contents(self::getHostApi() . $ip . '/csv/'));
+                    break;
+                
                 case 'json':
-                    $data = json_decode(file_get_contents(self::getHostApi().$ip.'/json/'));
-                break;
-
+                    $data = json_decode(file_get_contents(self::getHostApi() . $ip . '/json/'));
+                    break;
+                
                 case 'jsonp':
-                    $jsonp = file_get_contents(self::$hostApi.$ip.'/jsonp/');
-                    if($jsonp[0] !== '[' && $jsonp[0] !== '{') {
+                    $jsonp = file_get_contents(self::$hostApi . $ip . '/jsonp/');
+                    if ($jsonp[0] !== '[' && $jsonp[0] !== '{') {
                         $jsonp = substr($jsonp, strpos($jsonp, '('));
                     }
-                    $data = json_decode(trim($jsonp,'();'), false);
-                break;
-
+                    $data = json_decode(trim($jsonp, '();'), false);
+                    break;
+                
                 case 'yaml':
-                    $data = $this->_yaml(file_get_contents(self::getHostApi().$ip.'/yaml/'));
-                break;
-
+                    $data = $this->_yaml(file_get_contents(self::getHostApi() . $ip . '/yaml/'));
+                    break;
+                
                 case 'xml':
-                    $data = $this->_xml(file_get_contents(self::getHostApi().$ip.'/xml/'));
-                break;
-
+                    $data = $this->_xml(file_get_contents(self::getHostApi() . $ip . '/xml/'));
+                    break;
+                
                 default:
-                    $data = json_decode(file_get_contents(self::getHostApi().$ip.'/json/'));
-                break;
+                    $data = json_decode(file_get_contents(self::getHostApi() . $ip . '/json/'));
+                    break;
             }
-
+            
             if ($this->hasError() !== false) {
                 if (is_bool($data)) {
                     $data = new \stdClass();
@@ -219,13 +239,13 @@ class IpLocalization
             $data->error = true;
             $data->reason = implode("\n", $this->getErrors());
         }
-
+        
         if (isset($data->error)) {
             if (! is_bool($data->error)) {
                 $data->error = true;
             }
         }
-
+        
         return $data;
     }
 }

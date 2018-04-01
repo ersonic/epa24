@@ -13,85 +13,102 @@ namespace Epa;
 
 class AppConnection
 {
+
     /**
+     *
      * @var string
      */
     private static $_addressIp = '127.0.0.1';
 
     /**
+     *
      * @var string
      */
     private static $_deviceConnection = 'none';
 
     /**
+     *
      * @var string
      */
     private static $_requestUri;
 
     /**
+     *
      * @var string
      */
     private static $_requestUriProtocol = 'http';
 
     /**
+     *
      * @var string
      */
     private static $_userAgent;
 
     /**
+     *
      * @var int
      */
     private static $_requestHeaderCode = 200;
 
     /**
+     *
      * @var string
      */
     private static $_requestMethodType = 'POST';
 
     /**
+     *
      * @var string
      */
     private static $_requestUriModule = 'application';
 
     /**
+     *
      * @var string
      */
     private static $_requestUriController = 'index';
 
     /**
+     *
      * @var string
      */
     private static $_requestUriAction = 'index';
 
     /**
+     *
      * @var string
      */
     private static $_operationSystemName = 'undefined';
 
     /**
+     *
      * @var string
      */
     private static $_operationSystemVersion = 'undefined';
 
     /**
+     *
      * @var array
      */
     private static $_requestParamsPost = [];
 
     /**
+     *
      * @var array
      */
     private static $_requestParamsGet = [];
 
     /**
+     *
      * @var array
      */
     private static $_paramsConnection = [];
 
     /**
+     *
      * @name setAddressIp
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setAddressIp($value)
     {
@@ -99,6 +116,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getAddressIp
      * @access public
      * @return mixed
@@ -109,9 +127,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setDeviceConnection
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setDeviceConnection($value)
     {
@@ -119,6 +138,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getDeviceConnection
      * @access public
      * @return string
@@ -129,9 +149,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestUri
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setRequestUri($value)
     {
@@ -139,6 +160,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestUri
      * @access public
      * @return string
@@ -149,9 +171,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestUriProtocol
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setRequestUriProtocol($value)
     {
@@ -159,6 +182,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestUriProtocol
      * @access public
      * @return string
@@ -169,9 +193,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setUserAgent
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setUserAgent($value)
     {
@@ -179,6 +204,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getUserAgent
      * @access public
      * @return string
@@ -189,16 +215,18 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestHeaderCode
      * @access public
-     * @param int $value
+     * @param int $value            
      */
     public static function setRequestHeaderCode($value)
     {
-        self::$_requestHeaderCode = (int)$value;
+        self::$_requestHeaderCode = (int) $value;
     }
 
     /**
+     *
      * @name getRequestHeaderCode
      * @access public
      * @return int
@@ -209,9 +237,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestMethodType
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setRequestMethodType($value)
     {
@@ -219,6 +248,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestMethodType
      * @access public
      * @return string
@@ -229,9 +259,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestUriModule
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setRequestUriModule($value)
     {
@@ -239,6 +270,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestUriModule
      * @access public
      * @return string
@@ -249,9 +281,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestUriController
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setRequestUriController($value)
     {
@@ -259,6 +292,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestUriController
      * @access public
      * @return string
@@ -269,9 +303,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setRequestUriAction
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setRequestUriAction($value)
     {
@@ -279,6 +314,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestUriAction
      * @access public
      * @return string
@@ -289,9 +325,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setOperationSystemName
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setOperationSystemName($value)
     {
@@ -299,6 +336,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getOperationSystemName
      * @access public
      * @return string
@@ -309,9 +347,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name setOperationSystemVersion
      * @access public
-     * @param string $value
+     * @param string $value            
      */
     public static function setOperationSystemVersion($value)
     {
@@ -319,6 +358,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getOperationSystemVersion
      * @access public
      * @return string
@@ -329,9 +369,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name hasRequestParamPost
      * @access private
-     * @param string $key
+     * @param string $key            
      * @return bool
      */
     private static function hasRequestParamPost($key)
@@ -344,10 +385,12 @@ class AppConnection
     }
 
     /**
+     *
      * @name addRequestParamPost
      * @access public
-     * @param string $key
-     * @param $value
+     * @param string $key            
+     * @param
+     *            $value
      */
     public static function addRequestParamPost($key, $value)
     {
@@ -357,6 +400,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestParamsPost
      * @access public
      * @return array
@@ -367,9 +411,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestParamPost
      * @access public
-     * @param string $key
+     * @param string $key            
      * @return array
      */
     public static function getRequestParamPost($key)
@@ -380,9 +425,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name hasRequestParamGet
      * @access private
-     * @param string $key
+     * @param string $key            
      * @return bool
      */
     private static function hasRequestParamGet($key)
@@ -395,10 +441,11 @@ class AppConnection
     }
 
     /**
+     *
      * @name addRequestParamGet
      * @access public
-     * @param string $key
-     * @param string $value
+     * @param string $key            
+     * @param string $value            
      */
     public static function addRequestParamGet($key, $value)
     {
@@ -408,6 +455,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getRequestParamsGet
      * @access public
      * @return array
@@ -418,8 +466,9 @@ class AppConnection
     }
 
     /**
+     *
      * @access public
-     * @param string $key
+     * @param string $key            
      * @return mixed
      */
     public static function getRequestParamGet($key)
@@ -430,6 +479,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name prepareParamsConnection
      * @access private
      */
@@ -453,9 +503,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name hasParamConnection
      * @access public
-     * @param string $key
+     * @param string $key            
      * @return bool
      */
     public static function hasParamConnection($key)
@@ -468,10 +519,11 @@ class AppConnection
     }
 
     /**
+     *
      * @name addParamConnection
      * @access public
-     * @param string $key
-     * @param string $value
+     * @param string $key            
+     * @param string $value            
      */
     public function addParamConnection($key, $value)
     {
@@ -481,9 +533,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name removeParamConnection
      * @access public
-     * @param string $key
+     * @param string $key            
      */
     public function removeParamConnection($key)
     {
@@ -493,6 +546,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name removeAllParamsConnection
      * @access public
      */
@@ -504,9 +558,10 @@ class AppConnection
     }
 
     /**
+     *
      * @name getParamConnection
      * @access public
-     * @param string $key
+     * @param string $key            
      * @return mixed
      */
     public function getParamConnection($key)
@@ -517,6 +572,7 @@ class AppConnection
     }
 
     /**
+     *
      * @name getAllParamsConnection
      * @access public
      * @return array
