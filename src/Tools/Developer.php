@@ -126,4 +126,220 @@ class Developer
         }
         return $result;
     }
+
+    /**
+     *
+     * @name getInformation
+     * @access public
+     * @param string $value            
+     * @return bool|array
+     */
+    public static function getInformation($value)
+    {
+        clearstatcache();
+        if (empty($value)) {
+            return false;
+        }
+        
+        $isCheck = [];
+        
+        if (is_dir($value)) {
+            $isCheck[] = true;
+        }
+        
+        if (is_file($value)) {
+            $isCheck[] = true;
+        }
+        
+        if (! sizeof($isCheck)) {
+            return false;
+        }
+        
+        $info = [];
+        $stat = stat($value);
+        
+        if (is_array($stat) && sizeof($stat)) {
+            
+            $ts = [
+                0140000 => 'ssocket',
+                0120000 => 'llink',
+                0100000 => '-file',
+                0060000 => 'bblock',
+                0040000 => 'ddir',
+                0020000 => 'cchar',
+                0010000 => 'pfifo'
+            ];
+            
+            $t = decoct($stat['mode'] & 0170000);
+            
+            $str = (array_key_exists(octdec($t), $ts)) ? $ts[octdec($t)]{0} : 'u';
+            $str .= (($stat['mode'] & 0x0100) ? 'r' : '-') . (($stat['mode'] & 0x0080) ? 'w' : '-');
+            $str .= (($stat['mode'] & 0x0040) ? (($stat['mode'] & 0x0800) ? 's' : 'x') : (($stat['mode'] & 0x0800) ? 'S' : '-'));
+            $str .= (($stat['mode'] & 0x0020) ? 'r' : '-') . (($stat['mode'] & 0x0010) ? 'w' : '-');
+            $str .= (($stat['mode'] & 0x0008) ? (($stat['mode'] & 0x0400) ? 's' : 'x') : (($stat['mode'] & 0x0400) ? 'S' : '-'));
+            $str .= (($stat['mode'] & 0x0004) ? 'r' : '-') . (($stat['mode'] & 0x0002) ? 'w' : '-');
+            $str .= (($stat['mode'] & 0x0001) ? (($stat['mode'] & 0x0200) ? 't' : 'x') : (($stat['mode'] & 0x0200) ? 'T' : '-'));
+            
+            $info = [
+                'dirname' => @dirname($value),
+                'basename' => @basename($value),
+                'filename' => $value,
+                // 'realpath' => (@realpath($stat) != $stat) ? @realpath($stat)
+                // : '',
+                'human' => $str,
+                'octal' => substr(sprintf("0%o", $stat['mode']), - 4),
+                'decimal' => sprintf("%04o", $stat['mode']),
+                'fileperms' => @fileperms($value),
+                'mode' => $stat['mode'],
+                'uid' => $stat['uid'],
+                'gid' => $stat['gid'],
+                'owner' => (function_exists('posix_getpwuid')) ? @posix_getpwuid($stat['uid']) : '',
+                'group' => (function_exists('posix_getgrgid')) ? @posix_getgrgid($stat['gid']) : '',
+                'mode' => $stat['mode'],
+                'create' => $stat['atime'],
+                'modified' => $stat['mtime'],
+                'timecreate' => date('Y-m-d H:i:s', $stat['atime']),
+                'timemodified' => date('Y-m-d H:i:s', $stat['mtime']),
+                'size' => $stat['size'],
+                'blocks' => $stat['blocks'],
+                'block_size' => $stat['blksize'],
+                'is_readable' => @is_readable($value),
+                'is_writable' => @is_writable($value),
+                'type' => substr($ts[octdec($t)], 1),
+                'type_octal' => sprintf("%07o", octdec($t)),
+                'is_file' => @is_file($value),
+                'is_dir' => @is_dir($value),
+                'is_link' => @is_link($value)
+            ];
+        }
+        return $info;
+    }
+
+    /**
+     *
+     * @name arrayToYaml
+     * @access public
+     * @param array $data            
+     * @param string $output            
+     * @return bool
+     */
+    public static function arrayToYaml($data, $output)
+    {
+        $result = false;
+        try {
+            if (Server::isExistExtension('yaml') !== false) {
+                if (self::checkArray($data) !== false) {
+                    file_put_contents($output, yaml_emit($data));
+                    if (! file_exists($output)) {
+                        throw new \Epa\Exception('No exist file Yaml ' . var_dump($output));
+                    }
+                    $result = true;
+                } else {
+                    throw new \Epa\Exception('Valid element array ' . var_export([
+                        'output' => $output,
+                        'data' => $data
+                    ], true));
+                }
+            } else {
+                throw new \Epa\Exception('No instaled extension YAML');
+            }
+        } catch (\Epa\Exception $e) {
+            \Epa\Logger::LogException($e);
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * @name yamlToArray
+     * @access public
+     * @param string $value            
+     * @return bool|array
+     */
+    public static function yamlToArray($value)
+    {
+        $result = false;
+        try {
+            if (Server::isExistExtension('yaml') !== false) {
+                if (is_file($value)) {
+                    $dataSource = yaml_parse(file_get_contents($value));
+                    if (self::checkArray($dataSource) !== false) {
+                        $result = $dataSource;
+                    } else {
+                        throw new \Epa\Exception('Valid element array ' . var_export([
+                            'data' => $dataSource,
+                            'file' => $value
+                        ], true));
+                    }
+                }
+            } else {
+                throw new \Epa\Exception('No instaled extension YAML');
+            }
+        } catch (\Epa\Exception $e) {
+            \Epa\Logger::LogException($e);
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * @name arrayToXml
+     * @access public
+     * @param array $data            
+     * @param string $output            
+     * @return bool
+     */
+    public function arrayToXml($data, $output)
+    {
+        $result = false;
+        try {
+            if (Server::isExistExtension('simplexml') !== false) {
+                if (self::checkArray($data) !== false) {
+                    // Todo
+                } else {
+                    throw new \Epa\Exception('Valid element array ' . var_export([
+                        'output' => $output,
+                        'data' => $data
+                    ], true));
+                }
+            } else {
+                throw new \Epa\Exception('Error Server No Installed Extension : SimpleXML');
+            }
+        } catch (\Epa\Exception $e) {
+            \Epa\Logger::LogException($e);
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * @name xmlToArray
+     * @access public
+     * @param string $value            
+     * @return bool|array
+     */
+    public static function xmlToArray($value)
+    {
+        $result = false;
+        try {
+            if (is_file($value)) {
+                $dataSource = [];
+                if (self::checkArray($dataSource) !== false) {
+                    $result = $dataSource;
+                } else {
+                    throw new \Epa\Exception('Valid element array ' . var_export([
+                        'data' => $dataSource,
+                        'file' => $value
+                    ], true));
+                }
+            }
+        } catch (\Epa\Exception $e) {
+            \Epa\Logger::LogException($e);
+            $result = false;
+        }
+        return $result;
+    }
 }
