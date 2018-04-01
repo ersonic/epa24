@@ -1,7 +1,10 @@
 {
     "name": "ersonic/epa24",
+    "description": "Library Platform Application", 
     "keywords": ["mvc","webapplication","app", "website", "library"],
     "homepage": "http://epa24.pl",
+    "minimum-stability" : "dev", 
+    "license": "MIT", 
     "require": {
         "php" : "^5.6 || ^7.0",
         "psr/cache": "^1.0",
