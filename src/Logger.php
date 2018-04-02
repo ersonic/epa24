@@ -12,6 +12,8 @@
  */
 namespace Epa;
 
+use Epa\Tools\Developer;
+
 class Logger
 {
 
@@ -80,7 +82,115 @@ class Logger
      * @param string $message            
      */
     public static function LogException($e, $dir = NULL, $message = NULL)
-    {}
+    {
+        if (! is_null(\Epa\Epa::registry('ip'))) {
+            $addressIp = \Epa\Epa::registry('ip');
+        } else {
+            $addressIp = '127.0.0.1';
+        }
+        
+        if (! is_null($dir)) {
+            $exceptionDir = $dir;
+        } else {
+            $exceptionDir = getcwd() . '/data/logs/exceptions/';
+            if (is_bool(Developer::getInformation($exceptionDir))) {
+                mkdir(getcwd() . '/data/logs/exceptions', '0777', true);
+                $exceptionDir = getcwd() . '/data/logs/exceptions/';
+            }
+        }
+        
+        $data = $addressIp . ' - [' . date('Y-m-d H:i:s') . '] ' . "\n";
+        $data .= 'Class : ' . get_class($e) . ' << >> ' . "\n";
+        $data .= 'Code : ' . $e->getCode() . "\n";
+        $data .= 'Message : ' . $e->getMessage() . "\n";
+        $data .= 'Info : ' . $e->__toString() . "\n";
+        
+        if (! is_null($message)) {
+            $data .= 'Info Extension Exception : ' . $message . "\n";
+        }
+        
+        if (! is_null(self::getEmailNotificationException())) {
+            
+            $name = "Exception - Notification Application";
+            $email = "support@epa24.pl";
+            $recipient = self::getEmailNotificationException();
+            $mail_body = var_export($data, true);
+            $subject = "Exception - Notification";
+            $header = "From: " . $name . " <" . $email . ">\r\n";
+            
+            mail($recipient, $subject, $mail_body, $header);
+        }
+        
+        $fileException = 'log.exception.' . date('Y-m-d') . '.log';
+        $fp = @fopen($exceptionDir . $fileException, 'a');
+        if (! is_bool($fp)) {
+            fwrite($fp, $data);
+            fclose($fp);
+        }
+    }
+
+    /**
+     *
+     * @name LogError
+     * @access public
+     * @param string $error            
+     * @param string $dir            
+     * @param string $critical            
+     */
+    public static function LogError($error, $dir = NULL, $critical = false)
+    {
+        if (! is_null(\Epa\Epa::registry('sIp'))) {
+            $addressIp = \Epa\Epa::registry('sIp');
+        } else {
+            $addressIp = '127.0.0.1';
+        }
+        
+        if (! is_null($dir)) {
+            $errorDir = $dir;
+        } else {
+            $errorDir = getcwd() . '/data/logs/errors/';
+            if (! sizeof(Developer::getInformation($errorDir))) {
+                mkdir(getcwd() . '/data/logs/errors', '0777', true);
+                $errorDir = getcwd() . '/data/logs/errors/';
+            }
+        }
+        
+        $criticalMsg = 'noCritacialError';
+        if ($critical != false) {
+            $criticalMsg = 'CriticalError';
+        }
+        
+        $data = $addressIp . ';' . date('Y-m-d H:i:s') . ';' . $criticalMsg . ';';
+        
+        if (! empty($error)) {
+            $data .= '-->|' . $error . '|<--' . "\n";
+        } else {
+            $data .= '-->|no_message_error|<--' . "\n";
+        }
+        
+        // Send Mail
+        if ($critical != false) {
+            
+            if (! is_null(self::getEmailNotificationError())) {
+                
+                $name = "Error - Notification Application";
+                $email = "support@epa24.pl";
+                $recipient = self::getEmailNotificationException();
+                $mail_body = var_export($data, true);
+                $subject = "Error - Notification";
+                $header = "From: " . $name . " <" . $email . ">\r\n";
+                
+                mail($recipient, $subject, $mail_body, $header);
+            }
+        }
+        
+        $fileError = 'log.error.' . date('Y-m-d') . '.log';
+        $fp = @fopen($errorDir . $fileError, 'a');
+        if (! is_bool($fp)) {
+            fwrite($fp, $data . "\n");
+            fclose($fp);
+        }
+    }
 
     /**
      *
