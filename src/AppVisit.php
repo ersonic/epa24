@@ -357,4 +357,100 @@ class AppVisit extends AppConnection
             fclose($fp);
         }
     }
+
+    /**
+     *
+     * @name checkExistKeyValue
+     * @access private
+     * @param array $value            
+     * @return string
+     */
+    private static function checkExistKeyValue($value)
+    {
+        return ((isset($value)) ? $value : 'none');
+    }
+
+    /**
+     *
+     * @name toData
+     * @access private
+     * @param int $schema            
+     * @param array $data            
+     * @return array
+     */
+    private static function toData($schema, $data = [])
+    {
+        $dataSource = [];
+        switch ($schema) {
+            case 1:
+                $dataSource['date'] = date('Y-m-d', strtotime($data[1]));
+                $dataSource['datetime'] = self::checkExistKeyValue($data[1]);
+                $dataSource['addressip'] = self::checkExistKeyValue($data[2]);
+                $dataSource['isauthorize'] = self::checkExistKeyValue($data[15]);
+                $dataSource['account'] = self::checkExistKeyValue($data[16]);
+                $dataSource['user'] = self::checkExistKeyValue($data[17]);
+                $dataSource['requesturi'] = self::checkExistKeyValue($data[18]);
+                $dataSource['isssl'] = ((self::checkExistKeyValue($data[5]) == 'http') ? 'NONE' : 'YES');
+                $dataSource['httpuseragent'] = self::checkExistKeyValue($data[11]);
+                $dataSource['devicconnection'] = self::checkExistKeyValue($data[3]);
+                $dataSource['module'] = self::checkExistKeyValue($data[6]);
+                $dataSource['controller'] = self::checkExistKeyValue($data[7]);
+                $dataSource['action'] = self::checkExistKeyValue($data[8]);
+                $dataSource['method'] = self::checkExistKeyValue($data[4]);
+                $dataSource['os'] = implode(' ', array(
+                    $data[9],
+                    $data[10]
+                ));
+                $dataSource['browsertype'] = ((isset($data[12])) ? $data[12] : 'none');
+                $dataSource['browsername'] = ((isset($data[13])) ? $data[13] : 'none');
+                $dataSource['browserversion'] = ((isset($data[14])) ? $data[14] : 'none');
+                $dataSource['prefix'] = ((isset($data[19])) ? $data[19] : 'no-exist-prefix');
+                ;
+                break;
+        }
+        return $dataSource;
+    }
+
+    /**
+     *
+     * @name getAllVisits
+     * @access public
+     * @return array|boolean
+     */
+    public static function getAllVisits()
+    {
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
+        
+        $result = false;
+        
+        if (is_bool(self::getDirLogVisit())) {
+            $visitsDir = getcwd() . '/data/logs/visits/' . self::getSectionLogVisit() . '/';
+            self::setDirLogVisit($visitsDir);
+        }
+        
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(self::getDirLogVisit()), \RecursiveIteratorIterator::CHILD_FIRST);
+        
+        if (sizeof($iterator)) {
+            
+            $datResult = [];
+            
+            foreach ($iterator as $splFileInfo) {
+                if (! $splFileInfo->isDir()) {
+                    if (file_exists($splFileInfo->getPath() . '/' . $splFileInfo->getFilename())) {
+                        $_visit = file($splFileInfo->getPath() . '/' . $splFileInfo->getFilename());
+                        foreach ($_visit as $item) {
+                            $value = explode(self::getSeparatorLogVisit(), $item);
+                            $datResult[] = self::toData((int) $value[0], $value);
+                        }
+                    }
+                }
+            }
+            
+            if (sizeof($datResult)) {
+                $result = $datResult;
+            }
+        }
+        return $result;
+    }
 }
