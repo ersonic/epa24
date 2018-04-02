@@ -342,4 +342,103 @@ class Developer
         }
         return $result;
     }
+
+    /**
+     *
+     * @name fileMimeType
+     * @access public
+     * @param string $extension            
+     * @return boolean|string
+     */
+    public static function fileMimeType($extension)
+    {
+        if (preg_match('/^[0-9a-zA-Z]{2,6}$/i', $extension)) {
+            
+            $mimeTypes = [
+                // other'
+                'txt' => 'text/plain',
+                'htm' => 'text/html',
+                'html' => 'text/html',
+                'php' => 'text/html',
+                'css' => 'text/css',
+                'js' => 'application/javascript',
+                'json' => 'application/json',
+                'xml' => 'application/xml',
+                'swf' => 'application/x-shockwave-flash',
+                'flv' => 'video/x-flv',
+                // images
+                'png' => 'image/png',
+                'jpe' => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'jpg' => 'image/jpeg',
+                'gif' => 'image/gif',
+                'bmp' => 'image/bmp',
+                'ico' => 'image/vnd.microsoft.icon',
+                'tiff' => 'image/tiff',
+                'tif' => 'image/tiff',
+                'svg' => 'image/svg+xml',
+                'svgz' => 'image/svg+xml',
+                // archives
+                'zip' => 'application/zip',
+                'rar' => 'application/x-rar-compressed',
+                'exe' => 'application/x-msdownload',
+                'msi' => 'application/x-msdownload',
+                'cab' => 'application/vnd.ms-cab-compressed',
+                // audio_video
+                'mp3' => 'audio/mpeg',
+                'qt' => 'video/quicktime',
+                'mov' => 'video/quicktime',
+                // adobe
+                'pdf' => 'application/pdf',
+                'psd' => 'image/vnd.adobe.photoshop',
+                'ai' => 'application/postscript',
+                'eps' => 'application/postscript',
+                'ps' => 'application/postscript',
+                // ms_office
+                'doc' => 'application/msword',
+                'rtf' => 'application/rtf',
+                'xls' => 'application/vnd.ms-excel',
+                'ppt' => 'application/vnd.ms-powerpoint',
+                // open_office
+                'odt' => 'application/vnd.oasis.opendocument.text',
+                'ods' => 'application/vnd.oasis.opendocument.spreadsheet'
+            ];
+            
+            if (isset($mimeTypes[strtolower($extension)])) {
+                $result = $mimeTypes[strtolower($extension)];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * @name preparePermissionHuman
+     * @access public
+     * @param string $value            
+     * @return string
+     */
+    public static function preparePermissionHuman($value)
+    {
+        $ts = [
+            0140000 => 'ssocket',
+            0120000 => 'llink',
+            0100000 => '-file',
+            0060000 => 'bblock',
+            0040000 => 'ddir',
+            0020000 => 'cchar',
+            0010000 => 'pfifo'
+        ];
+        
+        $t = decoct($value & 0170000);
+        
+        $str = (array_key_exists(octdec($t), $ts)) ? $ts[octdec($t)]{0} : 'u';
+        $str .= (($value & 0x0100) ? 'r' : '-') . (($value & 0x0080) ? 'w' : '-');
+        $str .= (($value & 0x0040) ? (($value & 0x0800) ? 's' : 'x') : (($value & 0x0800) ? 'S' : '-'));
+        $str .= (($value & 0x0020) ? 'r' : '-') . (($value & 0x0010) ? 'w' : '-');
+        $str .= (($value & 0x0008) ? (($value & 0x0400) ? 's' : 'x') : (($value & 0x0400) ? 'S' : '-'));
+        $str .= (($value & 0x0004) ? 'r' : '-') . (($value & 0x0002) ? 'w' : '-');
+        $str .= (($value & 0x0001) ? (($value & 0x0200) ? 't' : 'x') : (($value & 0x0200) ? 'T' : '-'));
+        return $str;
+    }
 }
