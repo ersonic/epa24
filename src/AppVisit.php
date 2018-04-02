@@ -12,6 +12,8 @@
  */
 namespace Epa;
 
+use Epa\Tools\Developer;
+
 class AppVisit extends AppConnection
 {
 
@@ -315,7 +317,7 @@ class AppVisit extends AppConnection
     public static function add()
     {
         if (! is_bool(self::getDirLogVisit())) {
-            if (is_bool(\Epa\Tools\Developer::getInformation(self::getDirLogVisit()))) {
+            if (is_bool(Developer::getInformation(self::getDirLogVisit()))) {
                 mkdir(self::getDirLogVisit(), '0777', true);
             }
         }
@@ -323,7 +325,7 @@ class AppVisit extends AppConnection
         if (is_bool(self::getDirLogVisit())) {
             $sectionApplication = self::getSectionLogVisit();
             $visitDir = getcwd() . '/data/logs/visits/' . $sectionApplication . '/';
-            if (is_bool(\Epa\Tools\Developer::getInformation($visitDir))) {
+            if (is_bool(Developer::getInformation($visitDir))) {
                 mkdir(getcwd() . '/data/logs/visits/' . $sectionApplication, '0777', true);
                 $visitDir = getcwd() . '/data/logs/visits/' . $sectionApplication . '/';
             }
