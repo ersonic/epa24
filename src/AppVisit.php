@@ -31,6 +31,12 @@ class AppVisit extends AppConnection
      *
      * @var string
      */
+    private static $_sectionLogVisit = 'panel';
+
+    /**
+     *
+     * @var string
+     */
     private static $_separatorLogVisit = '#-#';
 
     /**
@@ -125,6 +131,35 @@ class AppVisit extends AppConnection
     public static function getFileLogVisit()
     {
         return self::$_fileLogVisit;
+    }
+
+    /**
+     *
+     * @name setSectionLogVisit
+     * @access public
+     * @param string $value            
+     */
+    public static function setSectionLogVisit($value)
+    {
+        self::$_sectionLogVisit = $value;
+    }
+
+    /**
+     *
+     * @name getSectionLogVisit
+     * @access public
+     * @return string
+     */
+    public static function getSectionLogVisit()
+    {
+        if (! in_array(self::$_separatorLogVisit, [
+            'panel',
+            'admin',
+            'install'
+        ])) {
+            return 'panel';
+        }
+        return self::$_separatorLogVisit;
     }
 
     /**
@@ -270,5 +305,54 @@ class AppVisit extends AppConnection
         }
         
         return $isExist;
+    }
+
+    /**
+     *
+     * @name add
+     * @access public
+     */
+    public static function add()
+    {
+        if (! is_bool(self::getDirLogVisit())) {
+            if (is_bool(\Epa\Tools\Developer::getInformation(self::getDirLogVisit()))) {
+                mkdir(self::getDirLogVisit(), '0777', true);
+            }
+        }
+        
+        if (is_bool(self::getDirLogVisit())) {
+            $sectionApplication = self::getSectionLogVisit();
+            $visitDir = getcwd() . '/data/logs/visits/' . $sectionApplication . '/';
+            if (is_bool(\Epa\Tools\Developer::getInformation($visitDir))) {
+                mkdir(getcwd() . '/data/logs/visits/' . $sectionApplication, '0777', true);
+                $visitDir = getcwd() . '/data/logs/visits/' . $sectionApplication . '/';
+            }
+            self::setDirLogVisit($visitDir);
+        }
+        
+        $paramsConnection = self::getAllParamsConnection();
+        
+        $visit = [];
+        $schema = self::$_schemaVisit[self::getSchemaVisitType()];
+        $visit[0] = self::getSchemaVisitType();
+        foreach ($schema as $item) {
+            if (isset($paramsConnection[$item])) {
+                $visit[] = $paramsConnection[$item];
+            } else {
+                $visit[] = self::getParamVisit($item);
+            }
+        }
+        $search = sha1(self::getSchemaVisitType() . self::getSeparatorLogVisit() . implode(self::getSeparatorLogVisit(), $visit));
+        $visit[(sizeof($visit) + 1)] = $search;
+        
+        if (self::getFileLogVisit() !== true) {
+            self::setFileLogVisit(date('Y_m_d') . '_visit.log');
+        }
+        
+        if (! self::check($search)) {
+            $fp = fopen(self::getDirLogVisit() . self::getFileLogVisit(), 'a');
+            fwrite($fp, implode(self::getSeparatorLogVisit(), $visit) . "\n");
+            fclose($fp);
+        }
     }
 }
