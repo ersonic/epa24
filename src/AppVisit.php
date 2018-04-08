@@ -81,7 +81,8 @@ class AppVisit extends AppConnection
             'is_authorize',
             'account',
             'user',
-            'request_uri'
+            'request_uri',
+            'request_header_code'
         ]
     ];
 
@@ -404,7 +405,8 @@ class AppVisit extends AppConnection
                 $dataSource['browsertype'] = ((isset($data[12])) ? $data[12] : 'none');
                 $dataSource['browsername'] = ((isset($data[13])) ? $data[13] : 'none');
                 $dataSource['browserversion'] = ((isset($data[14])) ? $data[14] : 'none');
-                $dataSource['prefix'] = ((isset($data[19])) ? $data[19] : 'no-exist-prefix');
+                $dataSource['requestheadercode'] = ((isset($data[19])) ? $data[19] : 'none');
+                $dataSource['prefix'] = ((isset($data[20])) ? $data[20] : 'no-exist-prefix');
                 ;
                 break;
         }
