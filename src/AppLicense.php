@@ -13,5 +13,14 @@ namespace Epa;
 
 class AppLicense
 {
-    
+    /**
+     * @name checkLicense
+     * @access public
+     * @return boolean
+     */
+    public function checkLicense()
+    {
+       $result = false;
+       return $result;
+    }
 }
