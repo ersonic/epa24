@@ -407,7 +407,6 @@ class AppVisit extends AppConnection
                 $dataSource['browserversion'] = ((isset($data[14])) ? $data[14] : 'none');
                 $dataSource['requestheadercode'] = ((isset($data[19])) ? $data[19] : 'none');
                 $dataSource['prefix'] = ((isset($data[20])) ? $data[20] : 'no-exist-prefix');
-                ;
                 break;
         }
         return $dataSource;
