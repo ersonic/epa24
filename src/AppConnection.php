@@ -108,7 +108,7 @@ class AppConnection
      *
      * @name setAddressIp
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setAddressIp($value)
     {
@@ -130,7 +130,7 @@ class AppConnection
      *
      * @name setDeviceConnection
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setDeviceConnection($value)
     {
@@ -152,7 +152,7 @@ class AppConnection
      *
      * @name setRequestUri
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setRequestUri($value)
     {
@@ -174,7 +174,7 @@ class AppConnection
      *
      * @name setRequestUriProtocol
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setRequestUriProtocol($value)
     {
@@ -196,7 +196,7 @@ class AppConnection
      *
      * @name setUserAgent
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setUserAgent($value)
     {
@@ -218,7 +218,7 @@ class AppConnection
      *
      * @name setRequestHeaderCode
      * @access public
-     * @param int $value            
+     * @param int $value
      */
     public static function setRequestHeaderCode($value)
     {
@@ -240,7 +240,7 @@ class AppConnection
      *
      * @name setRequestMethodType
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setRequestMethodType($value)
     {
@@ -262,7 +262,7 @@ class AppConnection
      *
      * @name setRequestUriModule
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setRequestUriModule($value)
     {
@@ -284,7 +284,7 @@ class AppConnection
      *
      * @name setRequestUriController
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setRequestUriController($value)
     {
@@ -306,7 +306,7 @@ class AppConnection
      *
      * @name setRequestUriAction
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setRequestUriAction($value)
     {
@@ -328,7 +328,7 @@ class AppConnection
      *
      * @name setOperationSystemName
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setOperationSystemName($value)
     {
@@ -350,7 +350,7 @@ class AppConnection
      *
      * @name setOperationSystemVersion
      * @access public
-     * @param string $value            
+     * @param string $value
      */
     public static function setOperationSystemVersion($value)
     {
@@ -372,7 +372,7 @@ class AppConnection
      *
      * @name hasRequestParamPost
      * @access private
-     * @param string $key            
+     * @param string $key
      * @return bool
      */
     private static function hasRequestParamPost($key)
@@ -388,7 +388,7 @@ class AppConnection
      *
      * @name addRequestParamPost
      * @access public
-     * @param string $key            
+     * @param string $key
      * @param
      *            $value
      */
@@ -414,7 +414,7 @@ class AppConnection
      *
      * @name getRequestParamPost
      * @access public
-     * @param string $key            
+     * @param string $key
      * @return array
      */
     public static function getRequestParamPost($key)
@@ -428,7 +428,7 @@ class AppConnection
      *
      * @name hasRequestParamGet
      * @access private
-     * @param string $key            
+     * @param string $key
      * @return bool
      */
     private static function hasRequestParamGet($key)
@@ -444,8 +444,8 @@ class AppConnection
      *
      * @name addRequestParamGet
      * @access public
-     * @param string $key            
-     * @param string $value            
+     * @param string $key
+     * @param string $value
      */
     public static function addRequestParamGet($key, $value)
     {
@@ -468,7 +468,7 @@ class AppConnection
     /**
      *
      * @access public
-     * @param string $key            
+     * @param string $key
      * @return mixed
      */
     public static function getRequestParamGet($key)
@@ -506,7 +506,7 @@ class AppConnection
      *
      * @name hasParamConnection
      * @access public
-     * @param string $key            
+     * @param string $key
      * @return bool
      */
     public static function hasParamConnection($key)
@@ -522,10 +522,10 @@ class AppConnection
      *
      * @name addParamConnection
      * @access public
-     * @param string $key            
-     * @param string $value            
+     * @param string $key
+     * @param string $value
      */
-    public function addParamConnection($key, $value)
+    public static function addParamConnection($key, $value)
     {
         if (self::hasParamConnection($key) !== true) {
             self::$_paramsConnection[$key] = $value;
@@ -536,9 +536,9 @@ class AppConnection
      *
      * @name removeParamConnection
      * @access public
-     * @param string $key            
+     * @param string $key
      */
-    public function removeParamConnection($key)
+    public static function removeParamConnection($key)
     {
         if (self::hasParamConnection($key) !== false) {
             unset(self::$_paramsConnection[$key]);
@@ -550,7 +550,7 @@ class AppConnection
      * @name removeAllParamsConnection
      * @access public
      */
-    public function removeAllParamsConnection()
+    public static function removeAllParamsConnection()
     {
         if (sizeof(self::$_paramsConnection)) {
             self::$_paramsConnection = [];
@@ -561,10 +561,10 @@ class AppConnection
      *
      * @name getParamConnection
      * @access public
-     * @param string $key            
+     * @param string $key
      * @return mixed
      */
-    public function getParamConnection($key)
+    public static function getParamConnection($key)
     {
         if (self::hasParamConnection($key) !== false) {
             return self::$_paramsConnection[$key];
@@ -577,9 +577,31 @@ class AppConnection
      * @access public
      * @return array
      */
-    public function getAllParamsConnection()
+    public static function getAllParamsConnection()
     {
         self::prepareParamsConnection();
         return self::$_paramsConnection;
+    }
+
+    /**
+     *
+     * @name getallheaders
+     * @access public
+     * @link http://php.net/manual/pl/function.getallheaders.php
+     * @return array
+     */
+    public static function getallheaders()
+    {
+        if (! function_exists('getallheaders')) {
+            $headers = [];
+            foreach ($_SERVER as $name => $value) {
+                if (substr($name, 0, 5) == 'HTTP_') {
+                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                }
+            }
+            return $headers;
+        } else {
+            return getallheaders();
+        }
     }
 }
