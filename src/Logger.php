@@ -100,6 +100,7 @@ class Logger
         }
         
         $data = $addressIp . ' - [' . date('Y-m-d H:i:s') . '] ' . "\n";
+        $data .= 'File : ' . $e->getFile() . "\n";
         $data .= 'Class : ' . get_class($e) . ' << >> ' . "\n";
         $data .= 'Code : ' . $e->getCode() . "\n";
         $data .= 'Message : ' . $e->getMessage() . "\n";
