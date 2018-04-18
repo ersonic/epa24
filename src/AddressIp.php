@@ -54,7 +54,11 @@ class AddressIp
             } elseif (getenv('HTTP_CLIENT_IP')) {
                 $this->_addressIp = getenv('HTTP_CLIENT_IP');
             } else {
-                $this->_addressIp = getenv('REMOTE_ADDR');
+                if (isset($_SERVER['REMOTE_ADDR'])) {
+                    $this->_addressIp = $_SERVER['REMOTE_ADDR'];
+                } else {
+                    $this->_addressIp = '127.0.0.1';
+                }
             }
         }
     }
