@@ -108,8 +108,10 @@ class AppSeo
 
     /**
      *
-     * @param unknown $value
-     * @return unknown
+     * @name setSeoDirPath
+     * @access public
+     * @param string $value
+     * @return string
      */
     public function setSeoDirPath($value)
     {
