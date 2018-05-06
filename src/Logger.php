@@ -77,9 +77,9 @@ class Logger
      *
      * @name LogException
      * @access public
-     * @param object $e            
-     * @param string $dir            
-     * @param string $message            
+     * @param object $e
+     * @param string $dir
+     * @param string $message
      */
     public static function LogException($e, $dir = NULL, $message = NULL)
     {
@@ -110,6 +110,8 @@ class Logger
             $data .= 'Info Extension Exception : ' . $message . "\n";
         }
         
+        $data .= '--- ' . "\n";
+        
         if (! is_null(self::getEmailNotificationException())) {
             
             $name = "Exception - Notification Application";
@@ -134,9 +136,9 @@ class Logger
      *
      * @name LogError
      * @access public
-     * @param string $error            
-     * @param string $dir            
-     * @param string $critical            
+     * @param string $error
+     * @param string $dir
+     * @param string $critical
      */
     public static function LogError($error, $dir = NULL, $critical = false)
     {
@@ -197,7 +199,7 @@ class Logger
      *
      * @name LogVar
      * @access public
-     * @param mixed $value            
+     * @param mixed $value
      * @return string
      */
     public static function LogVar($value)
