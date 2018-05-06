@@ -14,6 +14,7 @@ namespace Epa\Db;
 
 class Entity
 {
+
     /**
      *
      * @var array
@@ -24,9 +25,9 @@ class Entity
      *
      * @name addError
      * @access protected
-     * @param string $action            
-     * @param string $field            
-     * @param string $value            
+     * @param string $action
+     * @param string $field
+     * @param string $value
      */
     protected function addError($action, $field, $value)
     {
@@ -39,8 +40,8 @@ class Entity
      *
      * @name removeError
      * @access public
-     * @param string $action            
-     * @param string $field            
+     * @param string $action
+     * @param string $field
      */
     public function removeError($action, $field)
     {
@@ -64,13 +65,17 @@ class Entity
      *
      * @name hasErrorForAction
      * @access public
-     * @param string $action            
+     * @param string $action
      * @return boolean
      */
     public function hasErrorForAction($action)
     {
-        if (sizeof($this->_errors[$action])) {
-            return true;
+        if (isset($this->_errors[$action])) {
+            if (sizeof($this->_errors[$action])) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
